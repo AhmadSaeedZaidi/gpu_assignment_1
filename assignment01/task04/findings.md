@@ -1,0 +1,2 @@
+## findings:
+gpu only performs better in this case for matrices of size roughly greater than 4000. cpu run time grows exponentially after 2000, while gpu run time seems to grow a noticeably slower. though for smaller sizes (less than 2000), the overhead for gpu compute makes it worse.
