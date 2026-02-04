@@ -4,6 +4,7 @@
 #include <string>
 #include <stdexcept>
 #include <cuda_runtime.h>
+#include <chrono>
 
 __global__ void addKernel(const int* A, const int* B, int* C, int size) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -92,7 +93,17 @@ int main(int argc, char* argv[]) {
         std::vector<int> h_A, h_B, h_C;
 
         readInput(inputObj, rows, cols, h_A, h_B);
+
+        // --- TIMER START ---
+        auto start = std::chrono::high_resolution_clock::now();
+
         addMatricesGPU(rows, cols, h_A, h_B, h_C);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+        std::cerr << elapsed.count() << "\n";
+        // --- TIMER END ---
+
         writeOutput(outputObj, rows, cols, h_C);
 
     } catch (const std::exception& e) {
